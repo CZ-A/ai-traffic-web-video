@@ -9,3 +9,20 @@ This project generates clean traffic for websites and videos using Python. It in
 
 ## Installation
 1. Clone the repository:
+git clone https://github.com/your-username/ai-traffic-web-video-api.git cd ai-traffic-web-video-api
+
+3. Install dependencies:
+pip install -r requirements.txt
+
+4. Run the application:
+python app.py
+
+## API Endpoints
+- Add URL: `POST /add_url`
+- Get URLs: `GET /get_urls`
+- Add Video URL: `POST /add_video`
+- Get Video URLs: `GET /get_videos`
+- Generate Traffic: `POST /generate_traffic`
+
+## License
+This project is licensed under the MIT License.
