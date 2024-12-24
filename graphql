@@ -1,0 +1,8 @@
+ai-traffic-web-video-api/
+│
+├── app.py                 # Kode utama aplikasi
+├── requirements.txt       # Dependensi Python
+├── README.md              # Dokumentasi proyek
+├── .gitignore             # File untuk mengabaikan file tertentu
+├── chromedriver/          # Folder untuk ChromeDriver (opsional)
+└── replit.nix             # Konfigurasi untuk Replit (opsional)
