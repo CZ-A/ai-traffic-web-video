@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
 
@@ -42,7 +41,7 @@ def get_urls():
 def get_videos():
     return jsonify({"videos": list_Video}), 200
 
-# Fungsi untuk menghasilkan traffic web
+# Fungsi untuk menghasilkan traffic web atau video
 @app.route('/generate_traffic', methods=['POST'])
 def generate_traffic():
     data = request.get_json()
@@ -50,6 +49,7 @@ def generate_traffic():
     num_requests = int(data.get("num_requests", 1))
 
     if type_traffic == "web":
+        # Menghasilkan traffic web menggunakan requests
         for _ in range(num_requests):
             for url in list_URL:
                 try:
@@ -60,9 +60,10 @@ def generate_traffic():
         return jsonify({"message": f"Generated {num_requests} web traffic requests"}), 200
 
     elif type_traffic == "video":
+        # Menghasilkan traffic video menggunakan Selenium WebDriver
         options = Options()
         options.add_argument("--headless")  # Menggunakan mode headless
-        service = Service("./chromedriver/chromedriver")
+        service = Service("./chromedriver/chromedriver")  # Pastikan path ke chromedriver benar
         driver = webdriver.Chrome(service=service, options=options)
 
         for _ in range(num_requests):
@@ -74,7 +75,7 @@ def generate_traffic():
                 except Exception as e:
                     print(f"Error with video {video_url}: {str(e)}")
 
-        driver.quit()
+        driver.quit()  # Menutup browser setelah selesai
         return jsonify({"message": f"Generated {num_requests} video traffic requests"}), 200
 
     return jsonify({"error": "Invalid traffic type"}), 400
