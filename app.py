@@ -62,7 +62,7 @@ def get_urls():
 def get_videos():
     return jsonify({"videos": list_Video}), 200
 
-# Fungsi untuk menghasilkan traffic web atau video
+# Fungsi untuk menghasilkan traffic web dan video menggunakan Selenium
 @app.route('/generate_traffic', methods=['POST'])
 def generate_traffic():
     data = request.get_json()
@@ -70,21 +70,28 @@ def generate_traffic():
     num_requests = int(data.get("num_requests", 1))
 
     if type_traffic == "web":
-        # Menghasilkan traffic web menggunakan requests
+        options = Options()
+        options.add_argument("--headless")  # Menggunakan mode headless
+        service = Service("./chromedriver/chromedriver")
+        driver = webdriver.Chrome(service=service, options=options)
+
+        # Membuka URL yang ada di list_URL menggunakan Selenium
         for _ in range(num_requests):
             for url in list_URL:
                 try:
-                    response = requests.get(url)
-                    print(f"Web Traffic to {url}: {response.status_code}")
+                    driver.get(url)  # Mengakses URL menggunakan Selenium
+                    time.sleep(3)  # Tunggu agar halaman sepenuhnya dimuat
+                    print(f"Web Traffic to {url}")
                 except Exception as e:
                     print(f"Error with {url}: {str(e)}")
+
+        driver.quit()
         return jsonify({"message": f"Generated {num_requests} web traffic requests"}), 200
 
     elif type_traffic == "video":
-        # Menghasilkan traffic video menggunakan Selenium WebDriver
         options = Options()
         options.add_argument("--headless")  # Menggunakan mode headless
-        service = Service("./chromedriver/chromedriver")  # Pastikan path ke chromedriver benar
+        service = Service("./chromedriver/chromedriver")
         driver = webdriver.Chrome(service=service, options=options)
 
         for _ in range(num_requests):
@@ -96,7 +103,7 @@ def generate_traffic():
                 except Exception as e:
                     print(f"Error with video {video_url}: {str(e)}")
 
-        driver.quit()  # Menutup browser setelah selesai
+        driver.quit()
         return jsonify({"message": f"Generated {num_requests} video traffic requests"}), 200
 
     return jsonify({"error": "Invalid traffic type"}), 400
