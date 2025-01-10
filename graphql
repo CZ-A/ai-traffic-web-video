@@ -1,8 +1,13 @@
 ai-traffic-web-video-api/
-│
-├── app.py                 # Kode utama aplikasi
-├── requirements.txt       # Dependensi Python
-├── README.md              # Dokumentasi proyek
-├── .gitignore             # File untuk mengabaikan file tertentu
-├── chromedriver/          # Folder untuk ChromeDriver (opsional)
-└── replit.nix             # Konfigurasi untuk Replit (opsional)
+project/
+├── app.py                 # Aplikasi utama Flask-Selenium
+├── requirements.txt       # Daftar dependensi
+├── chromedriver/          # Folder untuk Chromedriver (jika dibutuhkan)
+│   └── chromedriver       # File Chromedriver
+├── tests/                 # Folder untuk pengujian unit
+│   └── test_app.py        # Pengujian aplikasi Flask
+├── .github/               # Konfigurasi GitHub Actions
+│   └── workflows/
+│       └── ci.yml         # Konfigurasi CI/CD
+├── Dockerfile             # File Docker untuk container (opsional)
+└── README.md              # Dokumentasi proyek
