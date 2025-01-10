@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspaces/ai-traffic-web-video/app.py", line 1, in <module>
+    from flask import Flask, request, jsonify
+  File "/home/vscode/.local/lib/python3.9/site-packages/flask/__init__.py", line 5, in <module>
+    from .app import Flask as Flask
+  File "/home/vscode/.local/lib/python3.9/site-packages/flask/app.py", line 30, in <module>
+    from werkzeug.urls import url_quote
+ImportError: cannot import name 'url_quote' from 'werkzeug.urls' (/home/vscode/.local/lib/python3.9/site-packages/werkzeug/urls.py)
