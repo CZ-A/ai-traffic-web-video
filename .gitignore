@@ -1,4 +1,120 @@
-__pycache__/
-*.pyc
+
 chromedriver/
+# Sistem Operasi
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# File Log
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Direktori Build dan Cache
+dist/
+build/
+cache/
+out/
+*.egg-info/
+pip-wheel-metadata/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.pylintrc
+*.tox
+env/
+venv/
+.venv/
+*.ipynb_checkpoints
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor & IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.sublime-workspace
+*.sublime-project
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Linux
+.Trash-*
+
+# Gambar dan Thumbnail
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.psd
+
+# File Konfigurasi Sensitif
 .env
+.env.*
+*.key
+*.pem
+*.crt
+
+# File yang Dihasilkan
+*.class
+*.o
+*.so
+*.a
+*.out
+*.exe
+
+# File Kompresi & Backup
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.bak
+*.tmp
+*.old
+*.swp
+
+# Database
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+
+# Docker
+docker-compose.override.yml
+.env.local
+.env.*.local
+.envrc
+.idea
+
+# Log IDE/DevTools
+coverage/
+test-results/
+.cache/
+.vscode-test/
+*.coverage
