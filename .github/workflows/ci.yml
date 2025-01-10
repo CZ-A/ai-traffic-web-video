@@ -1,0 +1,71 @@
+name: Flask-Selenium CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout kode dari repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup Python versi yang diperlukan
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # Install dependensi
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Download Chrome dan Chromedriver
+      - name: Install Chrome and Chromedriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -fy install
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip -d chromedriver/
+          chmod +x chromedriver/chromedriver
+
+      # Jalankan pengujian Flask dan Selenium
+      - name: Run tests
+        env:
+          PATH: ./chromedriver:$PATH
+        run: |
+          python -m unittest discover -s tests
+
+      # Jalankan aplikasi Flask di GitHub Actions (opsional)
+      - name: Run Flask App (for test purposes)
+        env:
+          PATH: ./chromedriver:$PATH
+        run: |
+          nohup python app.py &
+          sleep 5
+          curl http://127.0.0.1:5000/get_urls
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout kode dari repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Deploy ke Heroku, Docker Hub, atau lainnya (opsional)
+      - name: Deploy Application
+        run: echo "Add your deployment script here"
