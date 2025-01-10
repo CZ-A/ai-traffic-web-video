@@ -4,12 +4,31 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import time
+import json
+import os
 
 app = Flask(__name__)
 
-# Daftar URL dan video yang akan digunakan
+# Inisialisasi daftar URL dan video
 list_URL = []
 list_Video = []
+
+# Fungsi untuk memuat data dari file JSON
+def load_data():
+    global list_URL, list_Video
+    if os.path.exists("url_list.json"):
+        with open("url_list.json", "r") as url_file:
+            list_URL = json.load(url_file)
+    if os.path.exists("video_list.json"):
+        with open("video_list.json", "r") as video_file:
+            list_Video = json.load(video_file)
+
+# Fungsi untuk menyimpan data ke file JSON
+def save_data():
+    with open("url_list.json", "w") as url_file:
+        json.dump(list_URL, url_file, indent=4)
+    with open("video_list.json", "w") as video_file:
+        json.dump(list_Video, video_file, indent=4)
 
 # Fungsi untuk menambahkan URL
 @app.route('/add_url', methods=['POST'])
@@ -18,6 +37,7 @@ def add_url():
     url = data.get("url")
     if url:
         list_URL.append(url)
+        save_data()  # Simpan perubahan ke file
         return jsonify({"message": "URL added successfully!"}), 200
     return jsonify({"error": "URL not provided"}), 400
 
@@ -28,6 +48,7 @@ def add_video():
     video_url = data.get("video_url")
     if video_url:
         list_Video.append(video_url)
+        save_data()  # Simpan perubahan ke file
         return jsonify({"message": "Video added successfully!"}), 200
     return jsonify({"error": "Video URL not provided"}), 400
 
@@ -81,4 +102,5 @@ def generate_traffic():
     return jsonify({"error": "Invalid traffic type"}), 400
 
 if __name__ == '__main__':
+    load_data()  # Memuat data dari file saat aplikasi dimulai
     app.run(debug=True)
