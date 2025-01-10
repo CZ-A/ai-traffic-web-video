@@ -41,21 +41,21 @@ jobs:
           unzip chromedriver_linux64.zip -d chromedriver/
           chmod +x chromedriver/chromedriver
 
+      # Jalankan aplikasi Flask di GitHub Actions (untuk pengujian)
+      - name: Run Flask App (for test purposes)
+        env:
+          PATH: ./chromedriver:$PATH
+        run: |
+          nohup python app.py &
+          sleep 5  # Tunggu aplikasi Flask siap
+          curl http://127.0.0.1:5000/get_urls  # Mengakses endpoint untuk verifikasi
+
       # Jalankan pengujian Flask dan Selenium
       - name: Run tests
         env:
           PATH: ./chromedriver:$PATH
         run: |
           python -m unittest discover -s tests
-
-      # Jalankan aplikasi Flask di GitHub Actions (opsional)
-      - name: Run Flask App (for test purposes)
-        env:
-          PATH: ./chromedriver:$PATH
-        run: |
-          nohup python app.py &
-          sleep 5
-          curl http://127.0.0.1:5000/get_urls
 
   deploy:
     needs: build-and-test
