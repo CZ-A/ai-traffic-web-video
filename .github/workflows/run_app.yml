@@ -1,4 +1,4 @@
-name: Flask-Selenium CI/CD
+name: run_app
 
 on:
   push:
