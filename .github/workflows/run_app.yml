@@ -29,26 +29,34 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Download Chrome dan Chromedriver
-      - name: Install Chrome and Chromedriver
+      # Install Google Chrome
+      - name: Install Google Chrome
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -fy install
+
+      # Install ChromeDriver sesuai versi Google Chrome yang terinstal
+      - name: Install ChromeDriver
+        run: |
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
           wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip -d chromedriver/
           chmod +x chromedriver/chromedriver
 
-      # Jalankan aplikasi Flask di GitHub Actions (untuk pengujian)
+      # Jalankan aplikasi Flask untuk pengujian (pastikan aplikasi berjalan di background)
       - name: Run Flask App (for test purposes)
         env:
           PATH: ./chromedriver:$PATH
         run: |
           nohup python app.py &
           sleep 5  # Tunggu aplikasi Flask siap
-          curl http://127.0.0.1:5000/get_urls  # Mengakses endpoint untuk verifikasi
+
+      # Verifikasi apakah aplikasi Flask berjalan dengan mengakses endpoint
+      - name: Verify Flask App
+        run: |
+          curl http://127.0.0.1:5000/get_urls
 
       # Jalankan pengujian Flask dan Selenium
       - name: Run tests
@@ -66,6 +74,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Deploy ke Heroku, Docker Hub, atau lainnya (opsional)
+      # Deploy aplikasi ke platform seperti Heroku atau Docker Hub (opsional)
       - name: Deploy Application
         run: echo "Add your deployment script here"
