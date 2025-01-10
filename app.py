@@ -3,7 +3,9 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
 import time
+import random
 import json
 import os
 
@@ -62,7 +64,7 @@ def get_urls():
 def get_videos():
     return jsonify({"videos": list_Video}), 200
 
-# Fungsi untuk menghasilkan traffic web dan video menggunakan Selenium
+# Fungsi untuk menghasilkan trafik web dan video menggunakan Selenium
 @app.route('/generate_traffic', methods=['POST'])
 def generate_traffic():
     data = request.get_json()
@@ -80,8 +82,17 @@ def generate_traffic():
             for url in list_URL:
                 try:
                     driver.get(url)  # Mengakses URL menggunakan Selenium
-                    time.sleep(3)  # Tunggu agar halaman sepenuhnya dimuat
+                    time.sleep(random.randint(5, 10))  # Tunggu agar halaman sepenuhnya dimuat (meniru pengunjung nyata)
                     print(f"Web Traffic to {url}")
+
+                    # Simulasikan pengunjung nyata (scrolling dan klik acak)
+                    body = driver.find_element("tag name", "body")
+                    body.click()  # Klik body untuk mensimulasikan interaksi
+                    time.sleep(random.randint(2, 5))  # Tunggu acak
+                    actions = ActionChains(driver)
+                    actions.move_to_element(body).perform()  # Scroll halaman
+                    time.sleep(random.randint(5, 10))  # Lihat halaman lebih lama
+
                 except Exception as e:
                     print(f"Error with {url}: {str(e)}")
 
@@ -98,8 +109,15 @@ def generate_traffic():
             for video_url in list_Video:
                 try:
                     driver.get(video_url)
-                    time.sleep(3)  # Menunggu video dimuat
+                    time.sleep(random.randint(5, 10))  # Menunggu video dimuat
                     print(f"Video Traffic to {video_url}")
+
+                    # Simulasikan pengunjung nyata (scrolling)
+                    body = driver.find_element("tag name", "body")
+                    actions = ActionChains(driver)
+                    actions.move_to_element(body).perform()  # Scroll video
+                    time.sleep(random.randint(5, 10))  # Tonton video lebih lama
+
                 except Exception as e:
                     print(f"Error with video {video_url}: {str(e)}")
 
@@ -110,4 +128,4 @@ def generate_traffic():
 
 if __name__ == '__main__':
     load_data()  # Memuat data dari file saat aplikasi dimulai
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)  # Bind ke alamat 0.0.0.0 agar dapat diakses di jaringan
