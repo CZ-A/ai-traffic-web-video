@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Traffic Web Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        h1 {
+            margin: 0;
+        }
+        main {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .url-list, .video-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .url-list li, .video-list li {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .url-list li a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .url-list li a:hover {
+            text-decoration: underline;
+        }
+        .video-list li {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AI Traffic Web Video</h1>
+    </header>
+
+    <main>
+        <!-- Bagian URL -->
+        <section class="section">
+            <h2>URL List</h2>
+            <ul class="url-list">
+                {% if url_list %}
+                    {% for url in url_list %}
+                        <li><a href="{{ url }}" target="_blank">{{ url }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <li>Tidak ada URL yang ditemukan.</li>
+                {% endif %}
+            </ul>
+        </section>
+
+        <!-- Bagian Video -->
+        <section class="section">
+            <h2>Video List</h2>
+            <ul class="video-list">
+                {% if video_list %}
+                    {% for video in video_list %}
+                        <li>{{ video }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>Tidak ada video yang ditemukan.</li>
+                {% endif %}
+            </ul>
+        </section>
+    </main>
+
+</body>
+                                                                           </html>
