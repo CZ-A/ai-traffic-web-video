@@ -6,3 +6,4 @@ unittest2
 chromedriver-autoinstaller
 gunicorn
 Werkzeug
+Flask-SQLAlchemy
