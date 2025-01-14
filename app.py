@@ -47,9 +47,10 @@ def add_url():
     url = data.get("url")
     if url and url.startswith("http"):
         list_URL.append(url)
-        save_data(URLS_FILE, list_URL)
+        save_data(URLS_FILE, list_URL)  # Simpan ke urls.json
         return jsonify({"message": "URL added successfully!"}), 200
     return jsonify({"error": "Invalid or missing URL"}), 400
+
 
 # Route untuk menambahkan video URL
 @app.route('/add_video', methods=['POST'])
@@ -58,7 +59,7 @@ def add_video():
     video_url = data.get("video_url")
     if video_url and video_url.startswith("http"):
         list_Video.append(video_url)
-        save_data(VIDEOS_FILE, list_Video)
+        save_data(VIDEOS_FILE, list_Video)  # Simpan ke videos.json
         return jsonify({"message": "Video added successfully!"}), 200
     return jsonify({"error": "Invalid or missing Video URL"}), 400
 
