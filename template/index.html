@@ -27,13 +27,20 @@
         .section {
             margin-bottom: 30px;
         }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        input[type="text"], button {
+            padding: 10px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
         .url-list, .video-list {
             list-style-type: none;
             padding: 0;
         }
         .url-list li, .video-list li {
             margin-bottom: 10px;
-            font-size: 16px;
         }
         .url-list li a {
             color: #4CAF50;
@@ -42,10 +49,38 @@
         .url-list li a:hover {
             text-decoration: underline;
         }
-        .video-list li {
-            font-size: 18px;
-        }
     </style>
+    <script>
+        // Fungsi untuk mengirim URL ke server
+        function addUrl() {
+            const urlInput = document.getElementById('url-input').value;
+            fetch('/add_url', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: urlInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || data.error);
+                if (data.message) location.reload(); // Muat ulang halaman jika berhasil
+            });
+        }
+
+        // Fungsi untuk mengirim Video URL ke server
+        function addVideo() {
+            const videoInput = document.getElementById('video-input').value;
+            fetch('/add_video', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ video_url: videoInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || data.error);
+                if (data.message) location.reload(); // Muat ulang halaman jika berhasil
+            });
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -53,9 +88,23 @@
     </header>
 
     <main>
-        <!-- Bagian URL -->
+        <!-- Form untuk menambahkan URL -->
+        <section class="form-section">
+            <h2>Tambahkan URL</h2>
+            <input type="text" id="url-input" placeholder="Masukkan URL web" />
+            <button onclick="addUrl()">Tambah URL</button>
+        </section>
+
+        <!-- Form untuk menambahkan Video URL -->
+        <section class="form-section">
+            <h2>Tambahkan Video URL</h2>
+            <input type="text" id="video-input" placeholder="Masukkan URL video" />
+            <button onclick="addVideo()">Tambah Video</button>
+        </section>
+
+        <!-- Daftar URL -->
         <section class="section">
-            <h2>URL List</h2>
+            <h2>Daftar URL</h2>
             <ul class="url-list">
                 {% if url_list %}
                     {% for url in url_list %}
@@ -67,9 +116,9 @@
             </ul>
         </section>
 
-        <!-- Bagian Video -->
+        <!-- Daftar Video -->
         <section class="section">
-            <h2>Video List</h2>
+            <h2>Daftar Video URL</h2>
             <ul class="video-list">
                 {% if video_list %}
                     {% for video in video_list %}
@@ -81,6 +130,5 @@
             </ul>
         </section>
     </main>
-
 </body>
 </html>
