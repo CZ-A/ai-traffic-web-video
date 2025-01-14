@@ -1,46 +1,36 @@
 from flask import Flask, request, jsonify, render_template
 import json
 import os
-import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+import time
 
 app = Flask(__name__)
 
-# File JSON
+# File untuk menyimpan URL dan Video URL
 URLS_FILE = "urls.json"
 VIDEOS_FILE = "videos.json"
 
-# Global Variables
-list_URL = []
-list_Video = []
-
 # Fungsi untuk memuat data dari file JSON
-def load_data(file_path):
-    if os.path.exists(file_path):
-        try:
-            with open(file_path, "r") as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            print(f"Error decoding JSON in {file_path}. Initializing empty list.")
-    return []
+def load_data(file_name):
+    try:
+        with open(file_name, "r") as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
 
 # Fungsi untuk menyimpan data ke file JSON
-def save_data(file_path, data):
-    with open(file_path, "w") as f:
-        json.dump(data, f, indent=4)
+def save_data(file_name, data):
+    with open(file_name, "w") as file:
+        json.dump(data, file, indent=4)
 
-# Load data saat aplikasi dimulai
+# Inisialisasi daftar URL dan Video URL
 list_URL = load_data(URLS_FILE)
 list_Video = load_data(VIDEOS_FILE)
 
-# Route untuk homepage
-@app.route('/')
-def index():
-    return render_template('index.html', url_list=list_URL, video_list=list_Video)
-
-# Route untuk menambahkan URL
+# Endpoint untuk menambahkan URL
 @app.route('/add_url', methods=['POST'])
 def add_url():
     data = request.get_json()
@@ -51,8 +41,7 @@ def add_url():
         return jsonify({"message": "URL added successfully!"}), 200
     return jsonify({"error": "Invalid or missing URL"}), 400
 
-
-# Route untuk menambahkan video URL
+# Endpoint untuk menambahkan Video URL
 @app.route('/add_video', methods=['POST'])
 def add_video():
     data = request.get_json()
@@ -63,17 +52,7 @@ def add_video():
         return jsonify({"message": "Video added successfully!"}), 200
     return jsonify({"error": "Invalid or missing Video URL"}), 400
 
-# Route untuk mendapatkan semua URL
-@app.route('/get_urls', methods=['GET'])
-def get_urls():
-    return jsonify({"urls": list_URL}), 200
-
-# Route untuk mendapatkan semua video URL
-@app.route('/get_videos', methods=['GET'])
-def get_videos():
-    return jsonify({"videos": list_Video}), 200
-
-# Route untuk menghasilkan traffic
+# Endpoint untuk menghasilkan traffic menggunakan Selenium
 @app.route('/generate_traffic', methods=['POST'])
 def generate_traffic():
     data = request.get_json()
@@ -84,15 +63,17 @@ def generate_traffic():
         for _ in range(num_requests):
             for url in list_URL:
                 try:
-                    response = requests.get(url)
-                    print(f"Web Traffic to {url}: {response.status_code}")
+                    print(f"Simulating web traffic to {url}")
                 except Exception as e:
                     print(f"Error with {url}: {str(e)}")
         return jsonify({"message": f"Generated {num_requests} web traffic requests"}), 200
 
     elif type_traffic == "video":
         options = Options()
-        options.add_argument("--headless")
+        options.add_argument("--headless")  # Menggunakan mode headless
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
         service = Service("./chromedriver/chromedriver")
         driver = webdriver.Chrome(service=service, options=options)
 
@@ -110,5 +91,16 @@ def generate_traffic():
 
     return jsonify({"error": "Invalid traffic type"}), 400
 
+# Endpoint untuk menampilkan halaman utama
+@app.route('/')
+def index():
+    return render_template('index.html', url_list=list_URL, video_list=list_Video)
+
 if __name__ == '__main__':
+    # Pastikan file JSON ada dan berisi data kosong jika belum dibuat
+    if not os.path.exists(URLS_FILE):
+        save_data(URLS_FILE, [])
+    if not os.path.exists(VIDEOS_FILE):
+        save_data(VIDEOS_FILE, [])
+
     app.run(debug=True)
