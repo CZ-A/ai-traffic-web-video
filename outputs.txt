@@ -19,7 +19,7 @@
     <div class="debugger">
 <h1>NoSuchDriverException</h1>
 <div class="detail">
-  <p class="errormsg">selenium.common.exceptions.NoSuchDriverException: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+  <p class="errgitormsg">selenium.common.exceptions.NoSuchDriverException: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
 
 </p>
 </div>
